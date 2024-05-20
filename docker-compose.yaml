@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nestjs_app
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://prisma:topsecret@postgres_db:5432/mydatabase
+      JWT_SECRET: frandier
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - appointment_net
+
+  postgres:
+    image: postgres:16
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: prisma
+      POSTGRES_PASSWORD: topsecret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - appointment_net
+
+volumes:
+  postgres_data:
+
+networks:
+  appointment_net:
