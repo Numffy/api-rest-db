@@ -20,6 +20,14 @@ model Appointment {
   documentType        DocumentType  @relation(fields: [identification_type], references: [name])
   typeOfConsultId     String
   typeOfConsult       TypeOfConsult @relation(fields: [typeOfConsultId], references: [id])
+  hourId              String
+  hour AppointmentHours @relation(fields: [hourId], references: [id])
+}
+
+model AppointmentHours {
+  id    String @id @default(uuid())
+  value String
+  appointments Appointment[]
 }
 
 model DocumentType {
@@ -50,5 +58,3 @@ model Role {
   name  String @unique
   users User[]
 }
-
- 

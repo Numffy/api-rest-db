@@ -5,9 +5,12 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
+import * as dayjs from 'dayjs'
+import * as utc from 'dayjs/plugin/utc'
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { PrismaService } from 'src/libs/prisma/prisma.service';
+dayjs.extend(utc);
 
 @Injectable()
 export class AppointmentService {
@@ -17,7 +20,10 @@ export class AppointmentService {
   async create(createAppointmentDto: CreateAppointmentDto) {
     try {
       return await this.prisma.appointment.create({
-        data: createAppointmentDto,
+        data: {
+          ...createAppointmentDto,
+          date: dayjs(createAppointmentDto.date).utc().startOf('day').toISOString()
+        },
       });
     } catch (error) {
       this.handlerDbError(error);
