@@ -16,11 +16,10 @@ import { Auth } from 'src/decorators/auth.decorator';
 import { Role } from 'src/common/enums/role.enum';
 import { Response } from 'express';
 
-/* @Auth(Role.USER) */
+@Auth(Role.USER)
 @Controller('appointment')
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
-
 
   @Post()
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
@@ -50,15 +49,16 @@ export class AppointmentController {
     return this.appointmentService.remove(id);
   }
 
- 
-
-   @Get('/generate/pdf/:cc')
+  @Get('/generate/pdf/:cc')
   async getAppointmentPdf(@Param('cc') cc: string, @Res() response: Response) {
     try {
       const pdfBuffer = await this.appointmentService.generatePdf(cc);
 
       response.setHeader('Content-Type', 'application/pdf');
-      response.setHeader('Content-Disposition', `attachment; filename=${cc}.pdf`);
+      response.setHeader(
+        'Content-Disposition',
+        `attachment; filename=${cc}.pdf`,
+      );
 
       response.send(pdfBuffer);
     } catch (error) {
