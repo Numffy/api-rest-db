@@ -6,11 +6,20 @@ CREATE TABLE "Appointment" (
     "name" TEXT NOT NULL,
     "last_name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "phone" INTEGER NOT NULL,
+    "phone" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
     "typeOfConsultId" TEXT NOT NULL,
+    "hourId" TEXT NOT NULL,
 
     CONSTRAINT "Appointment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "AppointmentHours" (
+    "id" TEXT NOT NULL,
+    "value" TEXT NOT NULL,
+
+    CONSTRAINT "AppointmentHours_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -69,6 +78,9 @@ ALTER TABLE "Appointment" ADD CONSTRAINT "Appointment_identification_type_fkey" 
 
 -- AddForeignKey
 ALTER TABLE "Appointment" ADD CONSTRAINT "Appointment_typeOfConsultId_fkey" FOREIGN KEY ("typeOfConsultId") REFERENCES "TypeOfConsult"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Appointment" ADD CONSTRAINT "Appointment_hourId_fkey" FOREIGN KEY ("hourId") REFERENCES "AppointmentHours"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

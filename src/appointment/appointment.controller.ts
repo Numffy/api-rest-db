@@ -7,17 +7,20 @@ import {
   Param,
   Delete,
   ParseUUIDPipe,
+  Res,
 } from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { Auth } from 'src/decorators/auth.decorator';
 import { Role } from 'src/common/enums/role.enum';
+import { Response } from 'express';
 
-@Auth(Role.USER)
+/* @Auth(Role.USER) */
 @Controller('appointment')
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
+
 
   @Post()
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
@@ -45,5 +48,22 @@ export class AppointmentController {
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.appointmentService.remove(id);
+  }
+
+ 
+
+   @Get('/generate/pdf/:cc')
+  async getAppointmentPdf(@Param('cc') cc: string, @Res() response: Response) {
+    try {
+      const pdfBuffer = await this.appointmentService.generatePdf(cc);
+
+      response.setHeader('Content-Type', 'application/pdf');
+      response.setHeader('Content-Disposition', `attachment; filename=${cc}.pdf`);
+
+      response.send(pdfBuffer);
+    } catch (error) {
+      console.error(error);
+      response.status(500).send('Error generating PDF');
+    }
   }
 }

@@ -2,7 +2,6 @@ import { Type } from 'class-transformer';
 import {
   IsDate,
   IsEmail,
-  IsNumber,
   IsString,
   MaxLength,
 } from 'class-validator';
@@ -26,8 +25,8 @@ export class CreateAppointmentDto {
   @IsEmail()
   email: string;
 
-  @IsNumber()
-  phone: number;
+  @IsString()
+  phone: string;
 
   @Type(() => Date)
   @IsDate()
@@ -37,6 +36,5 @@ export class CreateAppointmentDto {
   typeOfConsultId: string;
 
   @IsString()
-  @MaxLength(30)
-  hour: string;
+  hourId: string;
 }
