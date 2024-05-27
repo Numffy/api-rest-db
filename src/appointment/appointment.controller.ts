@@ -16,16 +16,17 @@ import { Auth } from 'src/decorators/auth.decorator';
 import { Role } from 'src/common/enums/role.enum';
 import { Response } from 'express';
 
-@Auth(Role.USER)
 @Controller('appointment')
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
+  @Auth(Role.USER)
   @Post()
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
     return this.appointmentService.create(createAppointmentDto);
   }
 
+  @Auth(Role.ADMIN)
   @Get()
   findAll() {
     return this.appointmentService.findAll();

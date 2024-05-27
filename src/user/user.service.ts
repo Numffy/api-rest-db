@@ -23,7 +23,7 @@ export class UserService {
           password: await passHash(password),
           name: name,
           last_name: last_name,
-          roleId: '1',
+          roleId: '2',
         },
         select: {
           cc: true,
